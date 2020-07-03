@@ -2,10 +2,19 @@ import(data.table)
 
 export("load_train", "load_test")
 
+
+randomize_order <- function(data) {
+  data <- data[sample(1:nrow(data)), ]
+  data
+}
+
+
 load_train <- function() {
-  fread("data/train.csv")
+  data <- as.data.table(fread("data/train.csv"))
+  randomize_order(data)
 }
 
 load_test <- function() {
-  fread("data/test.csv")
+  data <- as.data.table(fread("data/test.csv"))
+  randomize_order(data)
 }
