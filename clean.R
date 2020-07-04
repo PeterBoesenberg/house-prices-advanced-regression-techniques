@@ -33,7 +33,7 @@ show_missing_data <- function(data) {
   sapply(data,function(x) sum(is.na(x)))
 }
 
-# replace missing values with mean of this col
+# replace missing values in numeric columns with mean of this col
 impute_missing_values <- function(data) {
   numeric_cols <- names(which(sapply(data, is.numeric)))
   for (j in numeric_cols) {
