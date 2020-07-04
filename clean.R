@@ -7,22 +7,24 @@ import(data.table)
 # MoSold + YrSold as one DateColumn?
 export("clean")
 
+numeric_features <-c("LotFrontage",
+                     "YearBuilt", 
+                     "YearRemodAdd",
+                     "MasVnrArea",
+                     "BsmtFinSF1",
+                     "BsmtFinSF2",
+                     "BsmtUnfSF",    
+                     "TotalBsmtSF",   "1stFlrSF" ,     "2ndFlrSF"    ,  "LowQualFinSF" , "GrLivArea"   ,  "BsmtFullBath", 
+                     "BsmtHalfBath",  "FullBath",      "HalfBath"     , "BedroomAbvGr",  "KitchenAbvGr" , "TotRmsAbvGrd" ,
+                     "Fireplaces",    "GarageYrBlt",   "GarageCars"  ,  "GarageArea"   , "WoodDeckSF"   , "OpenPorchSF",  
+                     "EnclosedPorch", "3SsnPorch",     "ScreenPorch"  , "PoolArea",
+                     "MiscVal", 
+                     "MoSold", 
+                     "YrSold")
+
 select_features <- function(data) {
   feature_list <- c("SalePrice", 
-                    "LotFrontage",
-                    "YearBuilt", 
-                    "YearRemodAdd",
-                    "MasVnrArea",
-                    "BsmtFinSF1",
-                    "BsmtFinSF2",
-                    "BsmtUnfSF",    
-                    "TotalBsmtSF",   "1stFlrSF" ,     "2ndFlrSF"    ,  "LowQualFinSF" , "GrLivArea"   ,  "BsmtFullBath", 
-                    "BsmtHalfBath",  "FullBath",      "HalfBath"     , "BedroomAbvGr",  "KitchenAbvGr" , "TotRmsAbvGrd" ,
-                    "Fireplaces",    "GarageYrBlt",   "GarageCars"  ,  "GarageArea"   , "WoodDeckSF"   , "OpenPorchSF",  
-                    "EnclosedPorch", "3SsnPorch",     "ScreenPorch"  , "PoolArea",
-                    "MiscVal", 
-                    "MoSold", 
-                    "YrSold"
+                    numeric_features
                     )
   data[, feature_list, with=FALSE]
 }
@@ -33,7 +35,7 @@ show_missing_data <- function(data) {
 
 # replace missing values with mean of this col
 impute_missing_values <- function(data) {
-  numeric_cols <- names(which(sapply(data,is.numeric)))
+  numeric_cols <- names(which(sapply(data, is.numeric)))
   for (j in numeric_cols) {
     set(data, which(is.na(data[[j]])), j , mean(data[, get(j)], na.rm=TRUE))
   }
