@@ -8,37 +8,41 @@ clean <- modules::use("clean.R")
 save <- modules::use("save.R")
 prediction <- modules::use("predict.R")
 
-# prepare data variables for submission
-# train <- load$load_train()
-# train <- clean$clean(train)
-# test_data <- load$load_test()
-# test <- test_data
-# test <- test[, SalePrice:=0]
-# test <- clean$clean(test)
+is_kaggle_mode <- FALSE
 
-rmse_values <- c()
 
-for(i in 1:10) {
-  # prepare data variables for local test, use test-train-split
-  data <- as.data.table(load$load_train())
-  train <- data[1:1200,]
+if(is_kaggle_mode) {
+  # prepare data variables for submission
+  train <- load$load_train()
   train <- clean$clean(train)
-  test_data <- data[1201:1460,]
+  test_data <- load$load_test()
   test <- test_data
+  test <- test[, SalePrice:=0]
   test <- clean$clean(test)
   
-  test_data <- test_data[, SalePriceOriginal := SalePrice]
-  
   result <- prediction$get_result(train, test, test_data)
+  save$save(result)
+} else {
+  rmse_values <- c()
+  
+  for(i in 1:10) {
+    # prepare data variables for local test, use test-train-split
+    data <- as.data.table(load$load_train())
+    train <- data[1:1200,]
+    train <- clean$clean(train)
+    test_data <- data[1201:1460,]
+    test <- test_data
+    test <- clean$clean(test)
+    
+    test_data <- test_data[, SalePriceOriginal := SalePrice]
+    
+    result <- prediction$get_result(train, test, test_data)
+    
+    rmse_result <- rmse(result$SalePrice, result$SalePriceOriginal)
+    rmse_values[i] <- rmse_result
+  }
   
   
-  
-  rmse_result <- rmse(result$SalePrice, result$SalePriceOriginal)
-  rmse_values[i] <- rmse_result
+  mean(rmse_values)
 }
-
-
-mean(rmse_values)
-
-save$save(result)
 
