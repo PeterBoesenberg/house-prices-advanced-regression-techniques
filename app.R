@@ -1,36 +1,44 @@
 library(plotly)
 library(data.table)
 library(modules)
+library(Metrics)
 
 load <- modules::use("load.R")
 clean <- modules::use("clean.R")
 save <- modules::use("save.R")
 prediction <- modules::use("predict.R")
 
-train <- load$load_train()
-train <- clean$clean(train)
-test_data <- load$load_test()
-test <- test_data
-test <- test[, SalePrice:=0]
-test <- clean$clean(test)
-
-# data <- as.data.table(load$load_train())
-# 
-# 
-# train <- data[1:1200,]
+# prepare data variables for submission
+# train <- load$load_train()
 # train <- clean$clean(train)
-# test_data <- data[1201:1460,]
+# test_data <- load$load_test()
 # test <- test_data
+# test <- test[, SalePrice:=0]
 # test <- clean$clean(test)
-# 
-# test_data <- test_data[, SalePriceOriginal := SalePrice]
 
-result <- prediction$get_result(train, test, test_data)
+rmse_values <- c()
+
+for(i in 1:10) {
+  # prepare data variables for local test, use test-train-split
+  data <- as.data.table(load$load_train())
+  train <- data[1:1200,]
+  train <- clean$clean(train)
+  test_data <- data[1201:1460,]
+  test <- test_data
+  test <- clean$clean(test)
+  
+  test_data <- test_data[, SalePriceOriginal := SalePrice]
+  
+  result <- prediction$get_result(train, test, test_data)
+  
+  
+  
+  rmse_result <- rmse(result$SalePrice, result$SalePriceOriginal)
+  rmse_values[i] <- rmse_result
+}
 
 
-deviation <- sqrt(mean(abs(result$SalePrice - result$SalePriceOriginal)^2))
-deviation <- mean(abs(result$SalePrice - result$SalePriceOriginal))
-deviation
+mean(rmse_values)
 
 save$save(result)
 

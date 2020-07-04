@@ -10,9 +10,6 @@ export("clean")
 select_features <- function(data) {
   feature_list <- c("SalePrice", 
                     "LotFrontage",
-                    "LotArea", 
-                    "OverallQual", 
-                    "OverallCond", 
                     "YearBuilt", 
                     "YearRemodAdd",
                     "MasVnrArea",
