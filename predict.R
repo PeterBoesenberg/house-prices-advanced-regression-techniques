@@ -1,6 +1,8 @@
 import(stats)
-
+import(data.table)
 export("get_result")
+
+
 
 get_result <- function(train, test, test_data) {
   model <- lm(SalePrice ~., data=train)

@@ -37,12 +37,11 @@ if(is_kaggle_mode) {
     test_data <- test_data[, SalePriceOriginal := SalePrice]
     
     result <- prediction$get_result(train, test, test_data)
-    
     rmse_result <- rmse(result$SalePrice, result$SalePriceOriginal)
     rmse_values[i] <- rmse_result
   }
   
-  
   mean(rmse_values)
 }
+
 

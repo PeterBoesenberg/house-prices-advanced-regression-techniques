@@ -1,6 +1,4 @@
 import(data.table)
-# check missing data
-# impute data
 # convert types of columns if needed
 # use factors
 # select features
@@ -23,9 +21,7 @@ numeric_features <-c("LotFrontage",
                      "YrSold")
 
 select_features <- function(data) {
-  feature_list <- c("SalePrice", 
-                    numeric_features
-                    )
+  feature_list <- c("SalePrice", numeric_features)
   data[, feature_list, with=FALSE]
 }
 
