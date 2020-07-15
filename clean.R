@@ -5,7 +5,7 @@ import(data.table)
 # MoSold + YrSold as one DateColumn?
 export("clean")
 
-numeric_features <-c("LotFrontage",
+numeric_features <- c("LotFrontage",
                      "YearBuilt", 
                      "YearRemodAdd",
                      "MasVnrArea",
@@ -19,9 +19,16 @@ numeric_features <-c("LotFrontage",
                      "MiscVal", 
                      "MoSold", 
                      "YrSold")
-
+factor_features <- c( "MSZoning", "Street", "LotShape", "LandContour", "LotConfig", "LandSlope",
+                     "Neighborhood", "Condition1", "Condition2", "BldgType", "HouseStyle", "OverallQual", "OverallCond", "RoofStyle",
+                     "RoofMatl","Exterior2nd","Exterior1st","Foundation")
+factors_MSSubClass <- c("20","30","40","45","50","60","70","75","80","85","90","120","150","160","180","190")
+# "Exterior1st","Foundation"
 select_features <- function(data) {
-  feature_list <- c("SalePrice", numeric_features)
+  feature_list <- c("SalePrice", numeric_features, factor_features)
+  data[,(factor_features):= lapply(.SD, as.factor), .SDcols = factor_features]
+  data[, MSSubClass:= factor(MSSubClass, factors_MSSubClass)]
+  
   data[, feature_list, with=FALSE]
 }
 
@@ -36,6 +43,10 @@ impute_missing_values <- function(data) {
     set(data, which(is.na(data[[j]])), j , mean(data[, get(j)], na.rm=TRUE))
   }
   data
+}
+
+create_factors <- function(data) {
+  
 }
 
 clean <- function(data) {

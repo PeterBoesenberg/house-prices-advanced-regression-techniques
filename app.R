@@ -29,6 +29,8 @@ if(is_kaggle_mode) {
     # prepare data variables for local test, use test-train-split
     data <- as.data.table(load$load_train())
     train <- data[1:1200,]
+    
+    train <- data
     train <- clean$clean(train)
     test_data <- data[1201:1460,]
     test <- test_data

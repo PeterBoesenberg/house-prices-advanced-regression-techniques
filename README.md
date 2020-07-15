@@ -28,3 +28,8 @@ mean of SalePrice from train: 54000-62000 (Kaggle: 0.42577)
 
 LotArea und YearBuilt                    
 ==> 65000 (Kaggle miss.replaced: 0.32085, Kaggle miss. not replaced: 0.32322)
+
+
+Alley: doesnt exist
+Utilities: Only one value
+PoolQc: only 7 have values
