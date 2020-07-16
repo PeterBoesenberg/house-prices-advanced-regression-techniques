@@ -68,6 +68,7 @@ show_missing_data <- function(data) {
 }
 
 # replace missing values in numeric columns with mean of this col
+# in non-numeric columns with most common value
 impute_missing_values <- function(data) {
   numeric_cols <- names(which(sapply(data, is.numeric)))
   for (j in numeric_cols) {
