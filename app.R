@@ -2,13 +2,14 @@ library(plotly)
 library(data.table)
 library(modules)
 library(Metrics)
+library(caret)
 
 load <- modules::use("load.R")
 clean <- modules::use("clean.R")
 save <- modules::use("save.R")
 prediction <- modules::use("predict.R")
 
-is_kaggle_mode <- FALSE
+is_kaggle_mode <- TRUE
 
 
 if(is_kaggle_mode) {
@@ -25,7 +26,7 @@ if(is_kaggle_mode) {
 } else {
   rmse_values <- c()
   
-  for(i in 1:10) {
+  for(i in 1:1) {
     # prepare data variables for local test, use test-train-split
     data <- as.data.table(load$load_train())
     train <- data[1:1200,]
@@ -35,7 +36,6 @@ if(is_kaggle_mode) {
     test_data <- data[1201:1460,]
     test <- test_data
     test <- clean$clean(test)
-    
     test_data <- test_data[, SalePriceOriginal := SalePrice]
     
     result <- prediction$get_result(train, test, test_data)
@@ -45,5 +45,6 @@ if(is_kaggle_mode) {
   
   mean(rmse_values)
 }
+
 
 

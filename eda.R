@@ -1,6 +1,8 @@
 library(corrplot)
 library(modules)
 library(ggpubr)
+library(caret)
+library(data.table)
 load <- modules::use("load.R")
 clean <- modules::use("clean.R")
 
@@ -20,6 +22,18 @@ check_normal_distribution <- function(data) {
 }
 
 
+get_feature_importance <- function(data) {
+  model <- lm(SalePrice ~., data=data)
+  varImp(model, scale = TRUE)
+}
+
+
+select_top_important_features <- function(data, n) {
+  var_imp <- get_feature_importance(data)
+  importance <- as.data.table(var_imp, keep.rownames=TRUE)[order(-Overall)]
+  importance[1:n, ]
+}
+
 check_correlations(train)
-distributions <- check_normal_distribution(train)
-print(distributions)
+check_normal_distribution(train)
+select_top_important_features(train, 20)
