@@ -9,7 +9,7 @@ clean <- modules::use("clean.R")
 save <- modules::use("save.R")
 prediction <- modules::use("predict.R")
 
-is_kaggle_mode <- TRUE
+is_kaggle_mode <- FALSE
 
 
 if(is_kaggle_mode) {
