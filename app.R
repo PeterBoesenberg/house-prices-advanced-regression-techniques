@@ -21,13 +21,12 @@ run <- function() {
     test <- test[, SalePrice:=0]
     test <- clean$clean(test)
     
-    results <- prediction$get_svm_all_methods_results(train, test, test_data)
-    result <- results[1][[1]]
+    result <- prediction$get_result(train, test, test_data)
     save$save(result)
   } else {
     rmse_values <- c()
     
-    for(i in 1:10) {
+    for(i in 1:1) {
       # prepare data variables for local test, use test-train-split
       data <- as.data.table(load$load_train())
       train <- data[1:1200,]
@@ -43,6 +42,7 @@ run <- function() {
       rmse_result <- rmse(result$SalePrice, result$SalePriceOriginal)
       rmse_values[i] <- rmse_result
     }
+    print("FINAL RESULT")
     print(mean(rmse_values))
     
   }

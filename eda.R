@@ -37,3 +37,7 @@ select_top_important_features <- function(data, n) {
 check_correlations(train)
 check_normal_distribution(train)
 select_top_important_features(train, 20)
+
+# nearZeroVar(train, saveMetrics= TRUE)
+# as.data.table(nearZeroVar(train, saveMetrics= TRUE), keep.rownames = T)[nzv==TRUE]
+# https://topepo.github.io/caret/pre-processing.html#nzv

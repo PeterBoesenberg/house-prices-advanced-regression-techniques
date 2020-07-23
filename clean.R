@@ -7,19 +7,35 @@ numeric_features <- c("LotFrontage",
                      "YearBuilt", 
                      "YearRemodAdd",
                      "MasVnrArea",
-                     "BsmtFinSF1",
+                     # "BsmtFinSF1",
                      "BsmtFinSF2",
                      "BsmtUnfSF",    
-                     "TotalBsmtSF",   "1stFlrSF" ,     "2ndFlrSF"    ,  "LowQualFinSF" , "GrLivArea"   ,  "BsmtFullBath", 
-                     "BsmtHalfBath",  "FullBath",      "HalfBath"     , "BedroomAbvGr",  "KitchenAbvGr" , "TotRmsAbvGrd" ,
+                     "TotalBsmtSF",   "1stFlrSF" ,     "2ndFlrSF"    ,  
+                     # "LowQualFinSF" , 
+                     "GrLivArea"   ,  "BsmtFullBath", 
+                     "BsmtHalfBath",  "FullBath",      "HalfBath"     , "BedroomAbvGr",  
+                     "KitchenAbvGr" , "TotRmsAbvGrd" ,
                      "Fireplaces",    "GarageYrBlt",   "GarageCars"  ,  "GarageArea"   , "WoodDeckSF"   , "OpenPorchSF",  
                      "EnclosedPorch", "3SsnPorch",     "ScreenPorch"  , "PoolArea",
                      "MiscVal", 
                      "MoSold", 
                      "YrSold")
 
-factor_features <- c("MSSubClass", "MSZoning", "RoofMatl","Street", "Condition1", "Condition2","LotShape", "LandContour","LotConfig","LandSlope",
-                      "Neighborhood","BldgType", "HouseStyle", "OverallQual", "OverallCond","RoofStyle","Exterior2nd","Exterior1st","Foundation"
+factor_features <- c(
+  # "MSSubClass" 
+  # ,
+  # ,
+  "RoofMatl",
+  # "Street",
+  # "Condition1",
+  # "Condition2",
+  # "LotShape",
+  # "LandContour",
+  # "LotConfig",
+  # "LandSlope",
+  # "Neighborhood",
+  "MSZoning"
+  # "BldgType", "HouseStyle", "OverallQual", "OverallCond","RoofStyle","Exterior2nd","Exterior1st","Foundation"
                      )
 
 factors_MSSubClass <- c("20","30","40","45","50","60","70","75","80","85","90","120","150","160","180","190")
@@ -39,25 +55,30 @@ factory_HouseStyle <- c("1.5Fin", "1.5Unf","1Story", "2.5Fin", "2.5Unf", "2Story
 select_features <- function(data) {
   feature_list <- c("SalePrice", numeric_features)
   feature_list <- c(feature_list, factor_features)
-  data[, MSSubClass:= factor(MSSubClass, factors_MSSubClass)]
-  data[, MSZoning:= factor(MSZoning, factors_MSZoning)]
-  data[, Street:= factor(Street, factors_Street)]
+  print("FEATURES")
+  print(feature_list)
+  # data[, MSSubClass:= factor(MSSubClass, factors_MSSubClass)]
+  # data[, MSZoning:= factor(MSZoning, factors_MSZoning)]
+  # data[, Street:= factor(Street, factors_Street)]
   data[, RoofMatl:= factor(RoofMatl, factors_RoofMatl)]
-  data[, Condition1:= factor(Condition1, factors_Condition1)]
-  data[, Condition2:= factor(Condition2, factors_Condition1)]
-  data[, LotShape:= factor(LotShape, factors_LotShape)]
-  data[, LandContour:= factor(LandContour, factors_LandContour)]
-  data[, LotConfig:= factor(LotConfig, factors_LotConfig)]
-  data[, LandSlope:= factor(LandSlope, factors_LandSlope)]
-  data[, Neighborhood:= as.factor(Neighborhood)]
-  data[, BldgType:= as.factor(BldgType)]
-  data[, HouseStyle:= factor(HouseStyle, factory_HouseStyle)]
-  data[, OverallQual:= as.factor(OverallQual)]
-  data[, OverallCond:= factor(OverallCond, factors_OverallCond)]
-  data[, RoofStyle:= as.factor(RoofStyle)]
-  data[, Exterior1st:= factor(Exterior1st, factors_Exterior)]
-  data[, Exterior2nd:= factor(Exterior2nd, factors_Exterior)]
-  data[, Foundation:= as.factor(Foundation)]
+  # data[, Condition1:= factor(Condition1, factors_Condition1)]
+  # data[, Condition2:= factor(Condition2, factors_Condition1)]
+  # data[, LotShape:= factor(LotShape, factors_LotShape)]
+  # data[, LandContour:= factor(LandContour, factors_LandContour)]
+  # data[, LotConfig:= factor(LotConfig, factors_LotConfig)]
+  # data[, LandSlope:= factor(LandSlope, factors_LandSlope)]
+  # data[, Neighborhood:= as.factor(Neighborhood)]
+  # data[, BldgType:= as.factor(BldgType)]
+  # data[, HouseStyle:= factor(HouseStyle, factory_HouseStyle)]
+  # data[, OverallQual:= as.factor(OverallQual)]
+  # data[, OverallCond:= factor(OverallCond, factors_OverallCond)]
+  # data[, RoofStyle:= as.factor(RoofStyle)]
+  # data[, Exterior1st:= factor(Exterior1st, factors_Exterior)]
+  # data[, Exterior2nd:= factor(Exterior2nd, factors_Exterior)]
+  # data[, Foundation:= as.factor(Foundation)]
+
+  low_variance_features <- as.data.table(nearZeroVar(data, saveMetrics= TRUE), keep.rownames = T)[nzv==TRUE, rn]
+  feature_list <- feature_list[!(feature_list %in% low_variance_features)]
   
   data <- data[, feature_list, with=FALSE]
   data
