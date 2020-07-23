@@ -43,7 +43,8 @@ get_stacked_result <- function(train, test, test_data) {
                                   savePredictions = "final", 
                                   classProbs=TRUE, 
                                   index=createResample(train$SalePrice))
-  algorithms_to_use <- c( "ridge", "lasso", "glm", "enet")
+  # algorithms_to_use <- c( "ridge", "lasso", "glm", "enet","svmLinear", "xgbDART")
+  algorithms_to_use <- c( "ridge",  "xgbLinear")
   stacked_models <- caretList(SalePrice ~ ., data=train, trControl=trainingControl, methodList=algorithms_to_use)
   stacking_results <- resamples(stacked_models)
   
