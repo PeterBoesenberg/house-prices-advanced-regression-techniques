@@ -20,27 +20,27 @@ run <- function() {
     test <- test_data
     test <- test[, SalePrice:=0]
     test <- clean$clean(test, FALSE)
-    
+
     result <- prediction$get_result(train, test, test_data)
     save$save(result)
   } else {
     # prepare data variables for local test, use test-train-split
     data <- as.data.table(load$load_train())
     train <- data[1:1200,]
-    
+
     train <- data
     train <- clean$clean(train, TRUE)
     test_data <- data[1201:1460,]
     test <- test_data
     test <- clean$clean(test, FALSE)
     test_data <- test_data[, SalePriceOriginal := SalePrice]
-    
+
     result <- prediction$get_result(train, test, test_data)
     rmse_result <- rmse(result$SalePrice, result$SalePriceOriginal)
-    
+
     print("FINAL RESULT")
     print(rmse_result)
-    
+
   }
 }
 
